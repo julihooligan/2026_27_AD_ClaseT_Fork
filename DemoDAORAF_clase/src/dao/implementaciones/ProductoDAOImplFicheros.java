@@ -20,7 +20,7 @@ public class ProductoDAOImplFicheros implements ProductoDAO {
     public ProductoDAOImplFicheros(Path ruta) throws DAOException {
         this.ruta = ruta;
         try {
-           if (Files.notExists(ruta)) Files.createFile(ruta);
+            if (Files.notExists(ruta)) Files.createFile(ruta);
         } catch (IOException e) {
             throw new DAOException("No se puede crear el fichero " + ruta, e);
         }
@@ -70,14 +70,22 @@ public class ProductoDAOImplFicheros implements ProductoDAO {
      */
     @Override
     public boolean actualizar(Producto producto) throws DAOException {
-        return false;
+        try (RandomAccessFile raf = new RandomAccessFile(ruta.toString(), "rw")) {
+            long numero = devuelveNumeroDeRegistro(raf, producto.getReferencia());
+            if (numero == -1) return false;
+            escribirEn(raf, numero, producto);
+            return true;
+        } catch (IOException ioe) {
+            throw new DAOException("Error en actualizar productos " + producto.getReferencia());
+        }
     }
 
     // MÉTODOS AUXILIARES
     // Contar el número de registro que contiene el fichero
-    private long contar (RandomAccessFile raf) throws IOException {
-        return raf.length() /  TAM_REGISTRO;
+    private long contar(RandomAccessFile raf) throws IOException {
+        return raf.length() / TAM_REGISTRO;
     }
+
     // leer el registro 'n'
     private Producto leerEn(RandomAccessFile raf, long numRegistro) throws IOException {
         raf.seek((numRegistro - 1) * TAM_REGISTRO);
@@ -94,4 +102,21 @@ public class ProductoDAOImplFicheros implements ProductoDAO {
         raf.writeDouble(producto.getPrecio());
     }
 
+    /**
+     *
+     * @param raf
+     * @param referencia
+     * @return El numero del registro con esa referencia o -1
+     * si no lo encuentra
+     */
+    private long devuelveNumeroDeRegistro(RandomAccessFile raf, int referencia) throws IOException {
+        long totalRegistros = contar(raf);
+        for (long n = 1; n <= totalRegistros; n++) {
+            raf.seek((n - 1) * TAM_REGISTRO);
+            if (raf.readInt() == referencia) {
+                return n;
+            }
+        }
+        return -1;
+    }
 }
