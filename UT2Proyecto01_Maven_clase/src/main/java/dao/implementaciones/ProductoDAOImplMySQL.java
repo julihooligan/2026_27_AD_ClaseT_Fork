@@ -27,7 +27,7 @@ public class ProductoDAOImplMySQL implements ProductoDAO {
         this.conexionBD = conexionBD;
     }
 
-    /**
+    /**a
      * Guarda en el fichero un producto nuevo
      *
      * @param producto
