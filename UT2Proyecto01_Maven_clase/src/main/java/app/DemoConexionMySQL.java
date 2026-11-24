@@ -7,6 +7,8 @@ import dao.implementaciones.ProductoDAOImplMySQL;
 import modelo.Producto;
 
 import java.nio.file.Path;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 
@@ -23,29 +25,30 @@ public class DemoConexionMySQL {
             // Nos creamos un fichero
             ConexionBD conexionBD = new ConexionBD(ruta);
             ProductoDAO dao = new ProductoDAOImplMySQL(conexionBD);
-            // 1. Rellenar con 25 productos (igual que en ACT13, pero a través del DAO).
-            for (int i = 0; i < NUM_PRODUCTOS; i++) {
-                double precio = 1 + azar.nextDouble() * 199; // Obtiene un precio entre 1 y 200
-                precio = Math.round(precio * 100) / 100.0;  // Redondea a 2 decimales
-                dao.insertar(new Producto(1001 + i, precio));
-            }
 
-//            // 2. Mostrar los productos.
-//            System.out.println("=== Precios iniciales ===");
-//            mostrar(dao.listar());
-//
-//            // 3. Actualizar precios. -10% si precio > 100
-//            for (Producto p : dao.listar()) {
-//                double nuevoPrecio;
-//                if (p.getPrecio() > 100) {
-//                    nuevoPrecio = p.getPrecio() * 0.90;
-//                } else {
-//                    nuevoPrecio = p.getPrecio() * 1.10;
-//                }
-//                nuevoPrecio = (double) Math.round(nuevoPrecio * 100) / 100;
-//                Producto nuevo = new Producto(p.getReferencia(), nuevoPrecio);
-//                dao.actualizar(nuevo);
+//            // 1. Rellenar con 25 productos (igual que en ACT13, pero a través del DAO).
+//            for (int i = 0; i < NUM_PRODUCTOS; i++) {
+//                double precio = 1 + azar.nextDouble() * 199; // Obtiene un precio entre 1 y 200
+//                precio = Math.round(precio * 100) / 100.0;  // Redondea a 2 decimales
+//                dao.insertar(new Producto(1001 + i, precio));
 //            }
+
+            // 2. Mostrar los productos.
+            System.out.println("=== Precios iniciales ===");
+            mostrar(dao.listar());
+
+            // 3. Actualizar precios. -10% si precio > 100
+            for (Producto p : dao.listar()) {
+                double nuevoPrecio;
+                if (p.getPrecio() > 100) {
+                    nuevoPrecio = p.getPrecio() * 0.90;
+                } else {
+                    nuevoPrecio = p.getPrecio() * 1.10;
+                }
+                nuevoPrecio = (double) Math.round(nuevoPrecio * 100) / 100;
+                Producto nuevo = new Producto(p.getReferencia(), nuevoPrecio);
+                dao.actualizar(nuevo);
+            }
 //
 //            // 4. Mostrar los productos.
 //            System.out.println("=== Precios tras actualización de precios ===");
@@ -58,6 +61,16 @@ public class DemoConexionMySQL {
             System.out.println("Conexion establecida OK.");
         } catch (DAOException e) {
             System.err.println("Error al conectar " + e.getMessage());
+        }
+    }
+
+    static void mostrar(List<Producto> lista) {
+        Producto productos;
+        System.out.println("PRODUCTO        PRECIO");
+        for (Iterator<Producto> p  = lista.iterator(); p.hasNext(); ){
+            productos = p.next();
+            System.out.println(productos.getReferencia() + "        " + productos.getPrecio());
+
         }
     }
 }
