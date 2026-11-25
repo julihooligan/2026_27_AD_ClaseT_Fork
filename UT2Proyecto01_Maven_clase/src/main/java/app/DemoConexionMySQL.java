@@ -58,6 +58,29 @@ public class DemoConexionMySQL {
 //            System.err.println("Error al CONECTAR: " + e.getMessage());
 //        }
 //    }
+
+            // 5. Eliminar. Insertar un producto para luego borrarlo
+            // id=9001, precio=5.00
+            dao.insertar(new Producto(9001, 5.00));
+
+            // Mostrar lita completa.
+            mostrar(dao.listar());
+
+            // Eliminar ese registro.
+            dao.eliminar(9001);
+
+            // Volver a mostrar lista completa.
+            mostrar(dao.listar());
+
+            // 6. Buscar el 1001 y mostrar mensaje de existe o no.
+            Producto producto = dao.buscar(1001);
+            //if (dao.buscar(1001) != null){
+            if (producto != null){
+                System.out.println("El producto con id 1001 existe");
+            } else {
+                System.out.println("No se encontro ese producto");
+            }
+
             System.out.println("Conexion establecida OK.");
         } catch (DAOException e) {
             System.err.println("Error al conectar " + e.getMessage());

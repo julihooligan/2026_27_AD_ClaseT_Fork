@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDAOImplMySQL implements ProductoDAO {
-    private static final String SQL_INSERTAR = """
-            INSERT INTO productos VALUES(?, ?);
-            """;
+    private static final String SQL_INSERTAR =
+            "INSERT INTO productos VALUES(?, ?);";
     private static final String SQL_LISTAR =
             "SELECT id_producto, precio FROM productos ORDER BY id_producto";
     private static final String SQL_ACTUALIZAR =
@@ -110,7 +109,7 @@ public class ProductoDAOImplMySQL implements ProductoDAO {
 
     public Producto buscar (int referencia) throws DAOException{
         try (Connection conn = conexionBD.obtenerConexion();
-             PreparedStatement ps = conn.prepareStatement(SQL_BORRAR)){
+             PreparedStatement ps = conn.prepareStatement(SQL_BUSCAR)){
             ps.setInt(1, referencia);
 
             ResultSet rs = ps.executeQuery();
