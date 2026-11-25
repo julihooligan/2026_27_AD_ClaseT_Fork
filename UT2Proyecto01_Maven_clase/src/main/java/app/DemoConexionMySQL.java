@@ -49,7 +49,7 @@ public class DemoConexionMySQL {
                 Producto nuevo = new Producto(p.getReferencia(), nuevoPrecio);
                 dao.actualizar(nuevo);
             }
-//
+
 //            // 4. Mostrar los productos.
 //            System.out.println("=== Precios tras actualización de precios ===");
 //            mostrar(dao.listar());
@@ -57,7 +57,6 @@ public class DemoConexionMySQL {
 //        } catch (DAOException e) {
 //            System.err.println("Error al CONECTAR: " + e.getMessage());
 //        }
-//    }
 
             // 5. Eliminar. Insertar un producto para luego borrarlo
             // id=9001, precio=5.00
@@ -87,13 +86,18 @@ public class DemoConexionMySQL {
         }
     }
 
-    static void mostrar(List<Producto> lista) {
-        Producto productos;
-        System.out.println("PRODUCTO        PRECIO");
-        for (Iterator<Producto> p  = lista.iterator(); p.hasNext(); ){
-            productos = p.next();
-            System.out.println(productos.getReferencia() + "        " + productos.getPrecio());
-
+    private static void mostrar(List<Producto> productos) {
+        for (Producto p : productos){
+            System.out.println(p);
         }
     }
+
+//    static void mostrar(List<Producto> lista) {
+//        Producto productos;
+//        System.out.println("PRODUCTO        PRECIO");
+//        for (Iterator<Producto> p  = lista.iterator(); p.hasNext(); ){
+//            productos = p.next();
+//            System.out.println(productos.getReferencia() + "        " + productos.getPrecio());
+//        }
+//    }
 }
